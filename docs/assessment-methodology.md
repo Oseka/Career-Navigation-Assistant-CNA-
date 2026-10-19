@@ -35,7 +35,9 @@ The assessment measures a student's **interest** across nine technology areas to
 - Every question loads on **exactly one category** (no cross-category questions — keeps the scoring model transparent and testable).
 - All questions and options live in the database (FR-B1); administrators can edit wording or activate/deactivate questions without code changes.
 
-### Example questions (final wording authored in increment I3)
+### Question set
+
+The full 27-question set was authored with the seed framework in increment I1.4 and lives in `backend/app/seed/data/assessment.py` (wording to be reviewed and finalised in increment I3). Representative items:
 
 1. `software_dev` — "I enjoy designing and writing programs that solve everyday problems."
 2. `ai_ml` — "I find it exciting to train and evaluate models that learn from data."

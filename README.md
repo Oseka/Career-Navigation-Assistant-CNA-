@@ -4,7 +4,7 @@ An intelligent career guidance and development platform that helps Computer Scie
 
 CNA aims to help students discover suitable technology career paths, understand why those careers may match their interests, identify required skills, and follow structured learning roadmaps.
 
-**Project status:** Planning and documentation phase. Phases 1–2 are complete, with documentation awaiting review. Application development is planned for Phase 3.
+**Project status:** Increment I1 (environment and application foundation) is complete: backend and frontend skeletons, database schema, and seed content are implemented and tested. Feature development follows the increment plan in [docs/project-plan.md](docs/project-plan.md).
 
 ## What CNA Will Do
 
@@ -28,32 +28,101 @@ The `docs/` directory contains the project's planning and design documentation.
 | [Project Plan](docs/project-plan.md)                             | Development phases, increments, issues, acceptance criteria, and risks               |
 | [Decision Log](docs/decisions.md)                                | Architecture and project decision records                                            |
 
-## Planned Technology Stack
+## Technology Stack
 
-* **Frontend:** React, TypeScript, Tailwind CSS, and Vite
-* **Backend:** Python and Flask REST API
+* **Frontend:** React 19, TypeScript (strict), Tailwind CSS 4, and Vite
+* **Backend:** Python and Flask REST API (SQLAlchemy 2 + Pydantic v2)
 * **Database:** MySQL 8
 * **Testing:** pytest, Vitest, and Playwright
-* **Database migrations:** Alembic
+* **Database migrations:** Alembic (via Flask-Migrate)
 * **Version control:** Git and GitHub
 
-The stack and implementation details will be confirmed as development progresses.
-
-## Planned Repository Structure
+## Repository Structure
 
 ```text
-backend/     Flask REST API, recommendation engine, migrations, seeds, and tests
-frontend/    React application, components, feature modules, and tests
+backend/     Flask REST API, SQLAlchemy models, Alembic migrations, seed content, and pytest tests
+frontend/    React application (Vite + TypeScript + Tailwind), feature modules, and Vitest tests
 docs/        Project requirements, architecture, methodologies, and planning documents
 ```
 
-The application structure will be established during the implementation phase.
-
 ## Getting Started
 
-The application setup and execution instructions will be added during Phase 3, when the initial application skeleton is implemented.
+### Prerequisites
 
-The planned initial environment tasks include database configuration, database initialisation, and application bootstrap.
+* Python 3.13+
+* Node.js 20+ with npm
+* MySQL 8.0 running locally (service `MYSQL80` on Windows)
+* Git
+
+### 1. Database Bootstrap (once)
+
+Using the MySQL root account, create the schemas and a least-privilege application user:
+
+```sql
+CREATE DATABASE cna CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE cna_test CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE USER 'cna_app'@'localhost' IDENTIFIED BY '<app-password>';
+CREATE USER 'cna_app'@'127.0.0.1' IDENTIFIED BY '<app-password>';
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, DROP, INDEX, REFERENCES,
+      LOCK TABLES, CREATE TEMPORARY TABLES
+      ON cna.* TO 'cna_app'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, DROP, INDEX, REFERENCES,
+      LOCK TABLES, CREATE TEMPORARY TABLES
+      ON cna.* TO 'cna_app'@'127.0.0.1';
+GRANT ALL PRIVILEGES ON cna_test.* TO 'cna_app'@'localhost';
+GRANT ALL PRIVILEGES ON cna_test.* TO 'cna_app'@'127.0.0.1';
+FLUSH PRIVILEGES;
+```
+
+`cna` is the development schema. `cna_test` is used automatically by the test suite and is never touched by development data.
+
+### 2. Backend
+
+```bash
+cd backend
+python -m venv .venv
+.venv\Scripts\activate        # Windows   (bash: source .venv/Scripts/activate)
+pip install -e . --group dev
+copy .env.example .env        # bash: cp .env.example .env
+```
+
+Edit `backend/.env`: set `SECRET_KEY` to a long random string, put the MySQL application password into `DATABASE_URL`, and set `ADMIN_EMAIL`/`ADMIN_PASSWORD` (minimum 10 characters) for the bootstrap administrator account.
+
+Apply the schema and seed the reference content (both commands are idempotent and safe to re-run):
+
+```bash
+flask db upgrade              # create tables via Alembic migrations
+flask seed                    # 77 skills, 9 assessment categories, 27 questions, admin account
+flask run                     # API at http://127.0.0.1:5000
+```
+
+Verify the API: `curl http://127.0.0.1:5000/api/health` should return `{"status": "ok"}`.
+
+### 3. Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev                   # application at http://localhost:5174
+```
+
+The Vite dev server proxies `/api/*` requests to the Flask backend, so run both servers together. Port 5174 is configured explicitly because the Vite default (5173) may already be in use.
+
+### 4. Tests and Checks
+
+```bash
+# Backend (runs against the cna_test schema)
+cd backend && pytest
+
+# Frontend
+cd frontend && npm test
+```
+
+Static checks: `ruff check .` in `backend/`; `npm run lint` and `npm run typecheck` in `frontend/`.
+
+### Default Accounts
+
+The seed script creates one administrator account from `ADMIN_EMAIL`/`ADMIN_PASSWORD` in `backend/.env`. Student registration arrives with the authentication increment (I2).
 
 ## Important Notes
 

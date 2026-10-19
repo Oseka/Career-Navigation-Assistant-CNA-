@@ -42,4 +42,13 @@ Not in the initial build. Re-entry gate: approved provider, secure key managemen
 
 ## ADR-0010 — Time and IDs
 **Date:** 2026-10-14 · **Status:** Accepted
-All datetimes stored and served in UTC, ISO 8601 in the API; entity IDs are database-assigned integers (no UUIDs needed for a single-instance system).
+All datetimes stored and served in UTC, ISO 8601 in the API; entity IDs are database-assigned integers (no UUIDs needed for a single-instance system). *Implementation note (I1.4):* every pooled connection sets `time_zone = '+00:00'` via the PyMySQL `init_command`, so `CURRENT_TIMESTAMP` defaults write UTC.
+
+## ADR-0011 — Dropped legacy `cna` schema left by the previous project
+**Date:** 2026-10-19 · **Status:** Accepted (user-confirmed: back up, then drop)
+During I1.4 the first Alembic autogeneration revealed that the dev `cna` schema still contained nine tables from the previous, deleted CNA application (`users`, `mentors`, `community_posts`, etc.), because `CREATE DATABASE IF NOT EXISTS` had silently preserved it during the I1.1 bootstrap. The charter requires treating CNA as a brand-new project that must not depend on previous artifacts, and the legacy schema would have corrupted the new migrations. *Decision:* dump all nine tables to `C:\Users\HP\Documents\cna_old_schema_backup_2026-10-19.sql` (outside the repository), then drop and recreate `cna` empty before generating migration 0001. *Consequences:* the new schema starts clean and matches docs/database-design.md exactly; the old data remains recoverable only from the backup file.
+
+## ADR-0012 — Seeds are insert-only by natural key
+**Date:** 2026-10-19 · **Status:** Accepted
+Seed scripts (`flask seed`, `flask seed-skills`, `flask seed-assessment`, `flask seed-admin`) insert missing rows by natural key (skill name; category key; category+question order) and never modify existing rows, so administrator edits survive re-runs. The single documented exception is `seed-admin`, which is a bootstrap command: it always resets the admin password and role from `ADMIN_EMAIL`/`ADMIN_PASSWORD`. Content corrections during development are made by dropping the disposable dev schema and re-seeding, not by seed updates.
+

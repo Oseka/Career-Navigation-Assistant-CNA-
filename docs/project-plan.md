@@ -44,7 +44,7 @@
 
 | Issue | Objective | Acceptance criteria | Verification |
 |---|---|---|---|
-| I2.1 | `users`/`profiles`/`user_skills` models + Alembic migration | Migration runs clean; schema matches database-design.md | `flask db upgrade`; introspection |
+| I2.1 | `profiles`/`user_skills` models + Alembic migration (`users` already landed with migration 0001 in I1.4) | Migration runs clean; schema matches database-design.md | `flask db upgrade`; introspection |
 | I2.2 | Register/login/logout/me endpoints; Flask-Session; CSRF header check; rate limiting | FR-A1–A3 acceptance criteria met; 401/403/409/429 behaviours correct | Integration tests |
 | I2.3 | Profile + skills self-service APIs (Pydantic validated) | FR-A4–A5 met; ownership enforced (user A cannot read/write user B) | Integration tests incl. negative cases |
 | I2.4 | Frontend auth pages, route guards, profile & skills UI | Register→login→profile flow usable; guards redirect; states present | Component tests + Playwright happy path |
@@ -55,7 +55,7 @@
 | Issue | Objective | Acceptance criteria | Verification |
 |---|---|---|---|
 | I3.1 | Assessment models + migration (categories/questions/options/attempts/responses/scores) | Schema matches design; FK rules as documented | Migration + introspection |
-| I3.2 | Final question set authored (27 questions, 9 categories) and seeded | Every category ≥ 3 active questions; options scored 0–3 | Seed check + review |
+| I3.2 | Review and finalise the seeded question set (27 questions authored with the seed framework in I1.4) | Every category ≥ 3 active questions; options scored 0–3 | Seed check + review |
 | I3.3 | Assessment APIs: questions, start/active, autosave responses, complete, results, latest | FR-B1–B4 met; single in-progress attempt; completion validates completeness | Integration tests |
 | I3.4 | Scoring service implementing assessment-methodology.md | Formulas exact; deactivated questions excluded | Unit tests |
 | I3.5 | Assessment UI: category-grouped flow, progress, autosave, resumable, results screen | FR-B5 met; usable keyboard-only; autosave survives reload | Component tests + Playwright |

@@ -1,0 +1,95 @@
+"""Initial skills catalogue.
+
+Categories follow docs/database-design.md (section 3.3). Skills are seeded
+insert-only: existing rows are never modified, so admin edits survive re-runs.
+"""
+
+SKILLS: list[tuple[str, str]] = [
+    # programming_language
+    ("Python", "programming_language"),
+    ("Java", "programming_language"),
+    ("JavaScript", "programming_language"),
+    ("TypeScript", "programming_language"),
+    ("C#", "programming_language"),
+    ("C++", "programming_language"),
+    ("Go", "programming_language"),
+    ("PHP", "programming_language"),
+    ("Kotlin", "programming_language"),
+    ("Swift", "programming_language"),
+    # framework
+    ("React", "framework"),
+    ("Angular", "framework"),
+    ("Vue.js", "framework"),
+    ("Node.js", "framework"),
+    ("Express", "framework"),
+    ("Django", "framework"),
+    ("Flask", "framework"),
+    ("Spring Boot", "framework"),
+    ("ASP.NET Core", "framework"),
+    ("Flutter", "framework"),
+    # data
+    ("NumPy", "data"),
+    ("Pandas", "data"),
+    ("scikit-learn", "data"),
+    ("TensorFlow", "data"),
+    ("PyTorch", "data"),
+    ("Statistical analysis", "data"),
+    ("Data visualisation", "data"),
+    ("Feature engineering", "data"),
+    # database
+    ("SQL", "database"),
+    ("MySQL", "database"),
+    ("PostgreSQL", "database"),
+    ("MongoDB", "database"),
+    ("Redis", "database"),
+    ("Database design", "database"),
+    ("Query optimisation", "database"),
+    # cloud_devops
+    ("AWS", "cloud_devops"),
+    ("Microsoft Azure", "cloud_devops"),
+    ("Google Cloud Platform", "cloud_devops"),
+    ("Docker", "cloud_devops"),
+    ("Kubernetes", "cloud_devops"),
+    ("Terraform", "cloud_devops"),
+    ("CI/CD pipelines", "cloud_devops"),
+    ("Linux server administration", "cloud_devops"),
+    # security
+    ("Network security", "security"),
+    ("Vulnerability assessment", "security"),
+    ("Penetration testing", "security"),
+    ("OWASP security practices", "security"),
+    ("Cryptography fundamentals", "security"),
+    ("Incident response", "security"),
+    ("Security auditing", "security"),
+    # networking
+    ("TCP/IP fundamentals", "networking"),
+    ("DNS", "networking"),
+    ("Routing and switching", "networking"),
+    ("Firewall configuration", "networking"),
+    ("Network troubleshooting", "networking"),
+    ("Load balancing", "networking"),
+    # design
+    ("UI design principles", "design"),
+    ("UX research", "design"),
+    ("Wireframing and prototyping", "design"),
+    ("Figma", "design"),
+    ("Design systems", "design"),
+    ("Web accessibility (WCAG)", "design"),
+    ("Usability testing", "design"),
+    # testing
+    ("Manual testing", "testing"),
+    ("Test case design", "testing"),
+    ("Automated testing", "testing"),
+    ("Selenium", "testing"),
+    ("Unit testing", "testing"),
+    ("API testing", "testing"),
+    ("Performance testing", "testing"),
+    # tools
+    ("Git", "tools"),
+    ("GitHub", "tools"),
+    ("Postman", "tools"),
+    ("Jira", "tools"),
+    ("Command line (Bash/PowerShell)", "tools"),
+    ("Agile/Scrum practices", "tools"),
+    ("Debugging", "tools"),
+]
