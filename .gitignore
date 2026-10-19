@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+instance/
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# E2E artifacts
+test-results/
+playwright-report/
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
